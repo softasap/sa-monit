@@ -1,0 +1,6 @@
+---
+# defaults file for sa-monit
+  root_dir: "{{ role_path }}"
+  role_dir: "{{ role_path }}"
+
+  monit_version: "5.19.0-1"
