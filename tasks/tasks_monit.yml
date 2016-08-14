@@ -16,7 +16,7 @@
   - name: Monit | Download
     get_url: url="http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_{{monit_version}}_amd64.deb" dest="/tmp/monit_{{monit_version}}_amd64.deb"
 #                 https://mmonit.com/monit/dist/binary/5.19.0/monit-5.19.0-linux-x64.tar.gz
-#                 http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_5.19.0-1_amd64.deb   
+#                 http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_5.19.0-1_amd64.deb
     when: monit_check_deb.rc == 1
     tags:
       - monit
@@ -27,3 +27,19 @@
     become: yes
     tags:
       - monit
+
+  - name: Monit | Configure preset confs
+    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf.d/{{item}}.conf
+    with_items: "{{monit_presets}}"
+    become: yes
+    tags:
+      - monit
+      - update
+
+  - name: Monit | Restart
+    service: name=monit state=restarted
+    become: yes
+    when: docker_test is not defined
+    tags:
+      - monit
+      - update
