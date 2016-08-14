@@ -1,38 +1,26 @@
-Role Name
-=========
+sa-monit
+========
 
-A brief description of the role goes here.
+[![Build Status](https://travis-ci.org/softasap/sa-monit.svg?branch=master)](https://travis-ci.org/softasap/sa-monit)
 
-Requirements
-------------
+Important: for ubuntu 14.04 the latest possible version is 5.14 due to libssl-dev dependency.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+```
+  roles:
+    - {
+        role: "sa-monit"
+      }
+```
 
-Role Variables
---------------
+Advanced:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
-
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```
+  roles:
+    - {
+        role: "sa-monit",
+        monit_presets: ["basic", "basic_nginx", "elasticsearch"],
+        monit_version: "5.14-2", #  FOR 16.04 "5.19.0-1"
+        monit_gui_user: admin,
+        monit_gui_password: xeR5hSdSQcCnFVLV8PLy
+      }
+```

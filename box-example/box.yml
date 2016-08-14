@@ -13,7 +13,8 @@
          role: "sa-nginx"
        }
      - {
-         role: "sa-monit"
+         role: "sa-monit",
+         monit_presets: ["basic", "basic_nginx", "elasticsearch"]
        }
 
 
