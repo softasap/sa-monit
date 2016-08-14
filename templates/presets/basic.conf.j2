@@ -1,0 +1,40 @@
+#!monit
+
+set daemon 60 with start delay 60
+
+{% if monit_mailserver |default(False) %}
+set mailserver {{monit_mailserver }} port {{monit_mailserver_port | default(25)}}
+#  username "noreply@yourdomain.com" password "yourpass"
+  using tlsv1
+  with timeout 30 seconds
+
+set mail-format {
+  message: Monit $ACTION $SERVICE at $DATE on $HOST: $DESCRIPTION.
+}
+
+set alert {{monit_notify_email | default('root@localhost')}} not {instance}
+{% endif %}
+
+set httpd port 2812
+  allow {{monit_gui_user}}:{{monit_gui_password}}
+
+check system {{ansible_hostname}}
+  if loadavg (1min) > 5 then alert
+  if loadavg (5min) > 3 then alert
+  if memory usage > 85% then alert
+  if cpu usage (user) > 90% then alert
+  if cpu usage (system) > 50% then alert
+  if cpu usage (wait) > 20% then alert
+
+# Check ssh
+check process sshd with pidfile /var/run/sshd.pid
+  start program  "/usr/sbin/service start"
+  stop program  "/usr/sbin/service stop"
+  if failed host 127.0.0.1 port 22 protocol ssh then restart
+  if 3 restarts within 3 cycles then timeout
+  if 3 restarts within 3 cycles then alert
+
+# Check /
+check filesystem 'root' with path /
+  if space usage > 80% for 5 times within 15 cycles then alert
+  if inode usage > 80% then alert

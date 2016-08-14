@@ -1,0 +1,10 @@
+#!monit
+
+check host hashicorp-vault with address localhost
+  start program = "/sbin/start vault"
+  stop program = "/sbin/stop vault"
+  if failed host 127.0.0.1 port 8200 protocol http
+    status = 404
+    # Supported from 5.9
+    request /v1/ with content = "errors"
+  then restart
