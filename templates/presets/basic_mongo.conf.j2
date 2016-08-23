@@ -1,0 +1,11 @@
+#!monit
+
+check process mongod with pidfile /var/run/mongodb.pid
+  group databases
+  start program = "/usr/sbin/service mongod start"
+  stop program  = "/usr/sbin/service mongod stop"
+  if failed host 127.0.0.1 port 27017
+    with timeout 15 seconds
+  then restart
+  if 5 restarts within 10 cycles then timeout
+
