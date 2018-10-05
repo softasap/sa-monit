@@ -7,9 +7,12 @@
     tags:
       - monit
 
-  - name: Monit | libssl-dev dependency
-    apt: pkg="libssl-dev" state="present"
+  - name: Monit | package dependencies
+    apt: pkg="{{item}}" state="present"
     become: yes
+    with_items:
+      - libssl-dev
+      - libc6
     tags:
       - monit
 
