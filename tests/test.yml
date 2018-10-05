@@ -7,7 +7,7 @@
       when: ansible_distribution_release == "bionic"  
 
     - set_fact:
-        target_monit_version: "5.16.2"
+        target_monit_version: "5.16-2"
       when: ansible_distribution_release in ["xenial", "trusty"]
 
 
