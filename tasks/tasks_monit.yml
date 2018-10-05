@@ -7,23 +7,68 @@
     tags:
       - monit
 
-  - name: Monit | libssl-dev dependency
-    apt: pkg="libssl-dev" state="present"
+  - name: Monit | package dependencies
+    apt: pkg="{{item}}" state="present"
     become: yes
+    with_items:
+      - libssl-dev
     tags:
       - monit
+
+  - block:
+    
+       - name: Download openssl-1.0.2-latest.tar.gz
+         get_url:
+           url: https://www.openssl.org/source/openssl-1.0.2p.tar.gz
+           dest: /usr/src/openssl-1.0.2p.tar.gz
+         become: yes 
+
+       - name: Extract openssl-1.0.2-latest.tar.gz         
+         unarchive: 
+            src: /usr/src/openssl-1.0.2p.tar.gz
+            dest: /usr/src/
+            remote_src: yes
+         become: yes             
+
+       - name: ./config
+         shell: ./config
+         args:
+           chdir: /usr/src/openssl-1.0.2p
+         become: yes
+
+       - name: make
+         shell: make
+         args:
+           chdir: /usr/src/openssl-1.0.2p
+         become: yes         
+
+       - name: make install
+         shell: make install
+         args:
+           chdir: /usr/src/openssl-1.0.2p
+         become: yes         
+
+    when: monit_check_deb.rc == 1 and monit_version != "default"
+
 
   - name: Monit | Download
     get_url: url="http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_{{monit_version}}_amd64.deb" dest="/tmp/monit_{{monit_version}}_amd64.deb"
 #                 https://mmonit.com/monit/dist/binary/5.19.0/monit-5.19.0-linux-x64.tar.gz
 #                 http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_5.19.0-1_amd64.deb
-    when: monit_check_deb.rc == 1
+    when: monit_check_deb.rc == 1 and monit_version != "default"
     tags:
       - monit
 
-  - name: Monit | Install
+  - name: Monit | Install (from deb)
     apt: deb="/tmp/monit_{{monit_version}}_amd64.deb"
-    when: monit_check_deb.rc == 1
+    when: monit_check_deb.rc == 1 and monit_version != "default"
+    become: yes
+    tags:
+      - monit
+
+  - name: Monit | Install (from distribution)
+    apt: pkg="monit" state="present"
+    when: monit_check_deb.rc == 1 and monit_version == "default"
     become: yes
     tags:
       - monit

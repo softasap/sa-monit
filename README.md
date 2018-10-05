@@ -5,8 +5,12 @@ sa-monit
 [![License: MIT](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 Important: for ubuntu 14.04 the latest possible version is 5.14 due to libssl-dev dependency.
+So only "default" version supported
 
-```YAML
+For more modern systems you can choose latest stable distribution, like  `5.25.2-1` at the time of release.
+If "default" is too old for you.
+
+```yaml
   roles:
     - {
         role: "sa-monit"
@@ -15,7 +19,7 @@ Important: for ubuntu 14.04 the latest possible version is 5.14 due to libssl-de
 
 Advanced:
 
-```YAML
+```yaml
   roles:
     - {
         role: "sa-monit",
