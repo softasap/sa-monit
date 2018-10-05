@@ -24,9 +24,11 @@
          become: yes 
 
        - name: Extract openssl-1.0.2-latest.tar.gz         
-         shell: tar -zxf openssl-1.0.2p.tar.gz
-         args:
-           chdir: /usr/src 
+         unarchive: 
+            src: /usr/src/openssl-1.0.2p.tar.gz
+            dest: /usr/src/
+            remote_src: yes
+         become: yes             
 
        - name: ./config
          shell: ./config
