@@ -3,7 +3,7 @@
   root_dir: "{{ role_path }}"
   role_dir: "{{ role_path }}"
 
-  monit_version: "5.14-2" #  FOR 16.04 "5.19.0-1"
+  monit_version: "5.25.2-1" #  FOR 16.04 "5.14-2"
   monit_gui_user: admin
   monit_gui_password: xeR5hSdSQcCnFVLV8PLy
 
