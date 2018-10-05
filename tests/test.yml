@@ -3,6 +3,9 @@
   pre_tasks:
 
     - set_fact:
+        target_monit_version: "default"
+    
+    - set_fact:
         target_monit_version: "5.25.2-1"
       when: ansible_distribution_release == "bionic"  
 
