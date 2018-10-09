@@ -75,7 +75,7 @@
 
 
   - name: Monit | template custom presets
-    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf-available/{{item}}.conf  owner="root" group="monit"
+    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf-available/{{item}}.conf  owner="root" group="root"
     become: yes
     with_items:
       - "basic_mongo"
