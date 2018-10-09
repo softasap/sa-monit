@@ -73,6 +73,23 @@
     tags:
       - monit
 
+  - name: Monit | Ensure conf dir do exist
+    file: path="{{item}}" state="directory" owner="root" group="root"
+    with_items:
+      - /etc/monit/conf-available
+      - /etc/monit/conf-enabled
+    become: yes
+    tags:
+      - monit
+
+  - name: Monit | Ensure conf.d dir if any, is eliminated
+    file: path="/etc/monit/conf.d" state="absent"
+    with_items:
+      - /etc/monit/conf-available
+      - /etc/monit/conf-enabled
+    become: yes
+    tags:
+      - monit
 
   - name: Monit | template custom presets
     template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf-available/{{item}}.conf  owner="root" group="root"
