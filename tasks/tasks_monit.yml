@@ -73,9 +73,27 @@
     tags:
       - monit
 
+
+  - name: Monit | template custom presets
+    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf-available/{{item}}.conf  owner="root" group="monit"
+    become: yes
+    with_items:
+      - "basic_mongo"
+      - "basic_nginx"
+      - "basic"
+      - "basic_elasticsearch"
+      - "basic_hashicorp_vault"      
+    tags:
+      - monit
+
+
   - name: Monit | Configure preset confs
     template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf.d/{{item}}.conf
-    with_items: "{{monit_presets}}"
+    file:
+    src: "/etc/monit/conf-available/{{item}}.conf"
+    dest: "/etc/monit/conf-enabled/{{item}}.conf"
+    state: link
+    with_items: "{{monit_presets | default([])}}"
     become: yes
     tags:
       - monit
