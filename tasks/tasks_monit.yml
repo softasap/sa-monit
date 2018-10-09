@@ -88,11 +88,10 @@
 
 
   - name: Monit | Configure preset confs
-    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf.d/{{item}}.conf
     file:
-    src: "/etc/monit/conf-available/{{item}}.conf"
-    dest: "/etc/monit/conf-enabled/{{item}}.conf"
-    state: link
+      src: "/etc/monit/conf-available/{{item}}.conf"
+      dest: "/etc/monit/conf-enabled/{{item}}.conf"
+      state: link
     with_items: "{{monit_presets | default([])}}"
     become: yes
     tags:
