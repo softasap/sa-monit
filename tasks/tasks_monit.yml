@@ -8,10 +8,10 @@
       - monit
 
   - name: Monit | package dependencies
-    apt: pkg="{{item}}" state="present"
+    apt:
+      pkg: libssl-dev
+      state: "present"
     become: yes
-    with_items:
-      - libssl-dev
     tags:
       - monit
 
@@ -52,7 +52,9 @@
 
 
   - name: Monit | Download
-    get_url: url="http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_{{monit_version}}_amd64.deb" dest="/tmp/monit_{{monit_version}}_amd64.deb"
+    get_url:
+        url: "http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_{{ monit_version }}_amd64.deb"
+        dest: "/tmp/monit_{{ monit_version }}_amd64.deb"
 #                 https://mmonit.com/monit/dist/binary/5.19.0/monit-5.19.0-linux-x64.tar.gz
 #                 http://us.archive.ubuntu.com/ubuntu/pool/universe/m/monit/monit_5.19.0-1_amd64.deb
     when: monit_check_deb.rc == 1 and monit_version != "default"
@@ -60,7 +62,7 @@
       - monit
 
   - name: Monit | Install (from deb)
-    apt: deb="/tmp/monit_{{monit_version}}_amd64.deb"
+    apt: deb="/tmp/monit_{{ monit_version }}_amd64.deb"
     when: monit_check_deb.rc == 1 and monit_version != "default"
     become: yes
     tags:
@@ -74,7 +76,7 @@
       - monit
 
   - name: Monit | Ensure conf dir do exist
-    file: path="{{item}}" state="directory" owner="root" group="root"
+    file: path="{{ item }}" state="directory" owner="root" group="root"
     with_items:
       - /etc/monit/conf-available
       - /etc/monit/conf-enabled
@@ -92,7 +94,11 @@
       - monit
 
   - name: Monit | template custom presets
-    template: src={{role_dir}}/templates/presets/{{item}}.conf.j2 dest=/etc/monit/conf-available/{{item}}.conf  owner="root" group="root"
+    template:
+        src: "{{ role_dir }}/templates/presets/{{ item }}.conf.j2"
+        dest: "/etc/monit/conf-available/{{ item }}.conf"
+        owner: root
+        group: root
     become: yes
     with_items:
       - "basic_mongo"
@@ -106,10 +112,10 @@
 
   - name: Monit | Configure preset confs
     file:
-      src: "/etc/monit/conf-available/{{item}}.conf"
-      dest: "/etc/monit/conf-enabled/{{item}}.conf"
+      src: "/etc/monit/conf-available/{{ item }}.conf"
+      dest: "/etc/monit/conf-enabled/{{ item }}.conf"
       state: link
-    with_items: "{{monit_presets | default([])}}"
+    with_items: "{{ monit_presets | default([]) }}"
     become: yes
     tags:
       - monit

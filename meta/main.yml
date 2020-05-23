@@ -25,7 +25,8 @@ galaxy_info:
       versions:
         - trusty
         - xenial
-        - bionic        
+        - bionic
+        - focal
   galaxy_tags:
     - mmonit
     - monitoring
