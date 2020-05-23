@@ -4,10 +4,10 @@
 
     - set_fact:
         target_monit_version: "default"
-    
+
     - set_fact:
-        target_monit_version: "5.25.2-1"
-      when: ansible_distribution_release == "bionic"  
+        target_monit_version: "5.26.0-4"
+      when: ansible_distribution_release == "bionic"
 
     - set_fact:
         target_monit_version: "5.16-2"
@@ -18,5 +18,5 @@
     - {
         role: "role_under_test",
         docker_test: true,
-        monit_version: "{{target_monit_version}}" 
+        monit_version: "{{target_monit_version}}"
       }
